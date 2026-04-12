@@ -87,4 +87,20 @@ impl InstagramHttpClient {
         Ok(results)
     }
 
+    pub async fn search_thread_by_username(&self, username: &str) -> Result<Option<Thread>> {
+        let mut cursor = None;
+        for _ in 0..10 {
+            let res = self.get_threads(cursor.as_deref()).await?;
+            for thread in res.threads {
+                if thread.users.iter().any(|u| u.username == username) {
+                    return Ok(Some(thread));
+                }
+            }
+            cursor = res.next_cursor;
+            if !res.has_more || cursor.is_none() {
+                break;
+            }
+        }
+        Ok(None)
+    }
 }

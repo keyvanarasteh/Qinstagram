@@ -116,6 +116,42 @@ impl InstagramHttpClient {
         Ok(())
     }
 
+    pub async fn send_reaction(&self, thread_id: &str, item_id: &str, emoji: &str) -> Result<String> {
+        let client_context = uuid::Uuid::new_v4().to_string();
+        
+        let payload = serde_json::json!({
+            "action": "send_item",
+            "thread_ids": format!("[{}]", thread_id),
+            "client_context": client_context,
+            "reaction_type": "like",
+            "reaction_status": "created",
+            "item_id": item_id,
+            "node_type": "item",
+            "emoji": emoji,
+            "_csrftoken": self.get_cookie_value("csrftoken").unwrap_or_default(),
+            "device_id": self.device.device_id,
+            "guid": self.device.uuid,
+        });
+
+        let signed_body = crate::transport::signing::sign_request(&payload)?;
+        let url = format!("{}/api/v1/direct_v2/threads/broadcast/reaction/", crate::constants::HOST);
+        
+        let res = self.post(&url)
+            .header("content-type", "application/x-www-form-urlencoded; charset=UTF-8")
+            .body(signed_body)
+            .send()
+            .await?;
+            
+        let text_res = res.text().await.map_err(InstagramError::NetworkError)?;
+        let json_res: serde_json::Value = serde_json::from_str(&text_res).map_err(InstagramError::SerdeError)?;
+        
+        if json_res["status"] == "ok" {
+            Ok(client_context)
+        } else {
+            Err(InstagramError::ApiError(json_res["message"].as_str().unwrap_or("Failed to send reaction").to_string()))
+        }
+    }
+
     /// Unified seen state dispatcher modeling the TypeScript client's fallback mechanics.
     /// In a fully-enabled realtime build, this would try MQTT `RealtimeClient::mark_as_seen` first,
     /// before falling back to HTTP.
