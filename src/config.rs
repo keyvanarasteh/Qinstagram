@@ -17,7 +17,7 @@ pub struct Config {
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct LoginConfig {
-    pub default_account: Option<String>,
+    pub current_username: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]

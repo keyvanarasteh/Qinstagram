@@ -1,0 +1,29 @@
+# Qinstagram Coding Rules
+
+## General
+- Rust 2021 edition
+- All library code must pass `cargo clippy --workspace --all-targets -- -D warnings`
+- Never use `unwrap()` in library code — use `?` or explicit error handling mapping to `InstagramError`
+- Never use `println!` in library code — return values or use tracing
+- All public items need `///` doc comments
+- Feature-gate heavy network modules like `realtime` with `#[cfg(feature = "...")]`
+
+## Naming
+- Files: `snake_case.rs`
+- Structs/Enums: `PascalCase`
+- Functions: `snake_case`
+- Constants: `SCREAMING_SNAKE_CASE`
+
+## Error Handling
+- All operations return `Result<T, InstagramError>`
+- Network errors → `InstagramError::NetworkError`
+- JSON Parsing failures → `InstagramError::SerdeError`
+- API validation failures → `InstagramError::ApiError`
+- Default fallback → `InstagramError::Unknown`
+
+## API Design
+- The `prelude` module re-exports consumer-facing types only
+- Avoid leaking internal reqwest details into high level structs
+
+## Documentation
+- Update README.md and AGENTS.md with new features

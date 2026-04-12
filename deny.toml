@@ -1,0 +1,37 @@
+[targets]
+resolve = { modules = ["*"] }
+
+[licenses]
+unlicensed = "deny"
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "ISC",
+    "BSD-3-Clause",
+    "BSD-2-Clause",
+    "Unicode-3.0",
+    "Unicode-DFS-2016",
+    "OpenSSL",
+]
+confidence-threshold = 0.8
+
+[[licenses.clarify]]
+name = "ring"
+version = "*"
+expression = "MIT AND ISC AND OpenSSL"
+
+[[licenses.clarify.license-files]]
+path = "LICENSE"
+hash = "0xbd0eed23"
+
+[bans]
+multiple-versions = "warn"
+highlight = "all"
+
+[advisories]
+ignore = []
+vulnerability = "deny"
+unmaintained = "warn"
+unsound = "warn"
+yanked = "warn"
+notice = "warn"

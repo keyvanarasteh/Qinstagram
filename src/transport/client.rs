@@ -46,4 +46,14 @@ impl InstagramHttpClient {
     pub fn post(&self, url: &str) -> RequestBuilder {
         self.client.post(url)
     }
+
+    pub fn get_cookie_value(&self, name: &str) -> Option<String> {
+        let guard = self.cookie_store.lock().ok()?;
+        for cookie in guard.iter_any() {
+            if cookie.name() == name {
+                return Some(cookie.value().to_string());
+            }
+        }
+        None
+    }
 }

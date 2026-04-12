@@ -71,4 +71,32 @@ impl SessionManager {
         fs::write(&path, content).await.map_err(InstagramError::IoError)?;
         Ok(())
     }
+
+    pub async fn cleanup_sessions() -> Result<()> {
+        let mut home_dir = dirs::home_dir().ok_or_else(|| InstagramError::Unknown("Cannot find home directory".to_string()))?;
+        home_dir.push(".instagram-cli");
+        home_dir.push("users");
+        
+        if home_dir.exists() {
+            let mut entries = fs::read_dir(home_dir).await.map_err(InstagramError::IoError)?;
+            while let Ok(Some(entry)) = entries.next_entry().await {
+                let path = entry.path();
+                if path.is_dir() {
+                    let session_file = path.join("session.rust.json");
+                    if session_file.exists() {
+                        let _ = fs::remove_file(session_file).await;
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+
+    pub async fn delete_session(&self) -> Result<()> {
+        let path = self.session_file_path();
+        if path.exists() {
+            fs::remove_file(path).await.map_err(InstagramError::IoError)?;
+        }
+        Ok(())
+    }
 }

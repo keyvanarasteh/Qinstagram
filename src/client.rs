@@ -28,3 +28,45 @@ impl ClientBuilder {
         Ok(client)
     }
 }
+
+impl InstagramClient {
+    pub async fn cleanup_sessions() -> Result<()> {
+        SessionManager::cleanup_sessions().await
+    }
+
+    pub async fn logout(username: Option<&str>) -> Result<()> {
+        let mut config_mgr = crate::config::ConfigManager::new().await?;
+        
+        let target_username = if let Some(u) = username {
+            u.to_string()
+        } else {
+            config_mgr.config.login.current_username.clone().unwrap_or_default()
+        };
+        
+        if !target_username.is_empty() {
+             let sm = SessionManager::new(&target_username).await?;
+             sm.delete_session().await?;
+             if config_mgr.config.login.current_username.as_deref() == Some(&target_username) {
+                 config_mgr.config.login.current_username = None;
+                 config_mgr.save().await?;
+             }
+        } else {
+             config_mgr.config.login.current_username = None;
+             config_mgr.save().await?;
+        }
+        Ok(())
+    }
+
+    pub async fn switch_user(username: &str) -> Result<()> {
+        let sm = SessionManager::new(username).await?;
+        let state = sm.load_state().await?;
+        if state.is_none() {
+            return Err(crate::error::InstagramError::Unknown(format!("No session found for @{}", username)));
+        }
+        
+        let mut config_mgr = crate::config::ConfigManager::new().await?;
+        config_mgr.config.login.current_username = Some(username.to_string());
+        config_mgr.save().await?;
+        Ok(())
+    }
+}
