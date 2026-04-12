@@ -5,6 +5,7 @@ pub mod auth;
 pub mod error;
 pub mod transport;
 pub mod types;
+pub mod ws;
 pub mod user;
 pub mod direct;
 pub mod stories;

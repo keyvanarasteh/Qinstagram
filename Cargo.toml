@@ -36,7 +36,17 @@ version = "7.0"
 optional = true
 features = ["chrono"]
 
+[dependencies.axum]
+version = "0.7"
+optional = true
+features = ["ws", "macros"]
+
+[dependencies.futures-util]
+version = "0.3"
+optional = true
+
 [features]
 default = []
 realtime = ["rumqttc"]
 graphql = ["async-graphql"]
+websocket = ["axum", "futures-util"]
