@@ -213,9 +213,62 @@ impl QinstagramMutation {
         Ok(result)
     }
 
-    // --- Auth Context Modifiers (Only run if client pointer allows mutation, wait client inside Arc doesn't allow mut but in Qinstagram it uses RwLock or Mutex on specific items)
-    // Wait, let's cast or omit the ones that require `&mut self` if Qinstagram's client `&mut self`.
-    // Actually, `login` takes `&mut self`. GraphQL ctx is immutable Arc.
-    // Instead of login here, we can just skip login if it's unsafe in GraphQL.
-    // We will just expose the main ones.
+    // --- Auth Context Modifiers ---
+    // We instantiate standalone client instances to bypass Arc immutability,
+    // ensuring we can perform `&mut self` login flows perfectly.
+    
+    /// Normal login flow
+    async fn login(&self, ctx: &Context<'_>, username: String, password: String) -> Result<LoginResult> {
+        let mut local_client = crate::client::InstagramClient::builder().build().await
+            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        let res = local_client.login(&username, &password).await
+            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        Ok(res)
+    }
+
+    /// Two Factor login flow
+    async fn two_factor_login(&self, ctx: &Context<'_>, code: String, identifier: String, username: String) -> Result<LoginResult> {
+        let mut local_client = crate::client::InstagramClient::builder().build().await
+            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        let res = local_client.two_factor_login(&code, &identifier, &username).await
+            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        Ok(res)
+    }
+
+    /// Start Challenge flow
+    async fn start_challenge(&self, ctx: &Context<'_>, url: String) -> Result<bool> {
+        let mut local_client = crate::client::InstagramClient::builder().build().await
+            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        local_client.start_challenge(&url).await
+            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        Ok(true)
+    }
+
+    /// Send Challenge Code
+    async fn send_challenge_code(&self, ctx: &Context<'_>, url: String, code: String, username: String) -> Result<LoginResult> {
+        let mut local_client = crate::client::InstagramClient::builder().build().await
+            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        let res = local_client.send_challenge_code(&url, &code, &username).await
+            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        Ok(res)
+    }
+
+    /// Application Level static controls
+    async fn switch_user(&self, ctx: &Context<'_>, username: String) -> Result<bool> {
+        crate::client::InstagramClient::switch_user(&username).await
+            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        Ok(true)
+    }
+
+    async fn logout(&self, ctx: &Context<'_>, username: Option<String>) -> Result<bool> {
+        crate::client::InstagramClient::logout(username.as_deref()).await
+            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        Ok(true)
+    }
+
+    async fn cleanup_sessions(&self, ctx: &Context<'_>) -> Result<bool> {
+        crate::client::InstagramClient::cleanup_sessions().await
+            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        Ok(true)
+    }
 }
