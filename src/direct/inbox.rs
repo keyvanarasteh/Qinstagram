@@ -60,4 +60,30 @@ impl InstagramHttpClient {
         let thread: Thread = serde_json::from_value(thread_val.clone()).map_err(InstagramError::SerdeError)?;
         Ok(thread)
     }
+
+    pub async fn search_threads_by_title(&self, query: &str) -> Result<Vec<(Thread, f64)>> {
+        let mut threads_cache = Vec::new();
+        let mut cursor = None;
+
+        for _ in 0..2 {
+            let res = self.get_threads(cursor.as_deref()).await?;
+            threads_cache.extend(res.threads);
+            cursor = res.next_cursor;
+            if !res.has_more || cursor.is_none() {
+                break;
+            }
+        }
+
+        let mut results = Vec::new();
+        for thread in threads_cache {
+            // jaro_winkler returns ~0.0 for completely different, ~1.0 for same.
+            let score = strsim::jaro_winkler(&thread.title.to_lowercase(), &query.to_lowercase());
+            if score >= 0.4 {
+                results.push((thread, score));
+            }
+        }
+
+        results.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
+        Ok(results)
+    }
 }
