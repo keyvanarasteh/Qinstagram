@@ -711,21 +711,21 @@ realtime = ["rumqttc"]
 
 ### Phase 1 — Foundation (Est. 2-3 days)
 - [x] Create Cargo project with workspace
-- [ ] Implement `constants.rs`, `error.rs`
-- [ ] Implement `transport/device.rs` (device generation)
-- [ ] Implement `transport/signing.rs` (HMAC signing)
-- [ ] Implement `transport/headers.rs` (Instagram headers)
-- [ ] Implement `transport/client.rs` (reqwest wrapper)
-- [ ] Define all types in `types/` module
+- [x] Implement `constants.rs`, `error.rs`
+- [x] Implement `transport/device.rs` (device generation)
+- [x] Implement `transport/signing.rs` (HMAC signing)
+- [x] Implement `transport/headers.rs` (Instagram headers)
+- [x] Implement `transport/client.rs` (reqwest wrapper)
+- [x] Define all types in `types/` module
 
 ### Phase 2 — Auth (Est. 2 days)
-- [ ] Implement credential login flow
-- [ ] Implement 2FA login
-- [ ] Implement challenge flow
-- [ ] Implement session serialization/deserialization
-- [ ] Implement session-based login
-- [ ] Implement pre/post login flows
-- [ ] Port `ConfigManager`
+- [x] Implement credential login flow
+- [x] Implement 2FA login
+- [x] Implement challenge flow
+- [x] Implement session serialization/deserialization
+- [x] Implement session-based login
+- [x] Implement pre/post login flows
+- [x] Port `ConfigManager`
 
 ### Phase 3 — User (Est. 1 day)
 - [ ] Implement user search (fuzzy + exact)

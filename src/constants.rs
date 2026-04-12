@@ -1,0 +1,9 @@
+pub const APP_VERSION: &str = "416.0.0.47.66";
+pub const APP_VERSION_CODE: &str = "382206157";
+pub const SIGNATURE_KEY: &str = "9193488027538fd3450b83b7d05286d4ca9599a0f7eeed90d8c85925698a05dc";
+pub const BREADCRUMB_KEY: &str = "iN4$aGr0m";
+pub const SIGNATURE_VERSION: &str = "4";
+pub const IG_SIG_KEY_VERSION: &str = "4";
+pub const FACEBOOK_ANALYTICS_APP_ID: &str = "567067343352427";
+pub const HOSTNAME: &str = "i.instagram.com";
+pub const HOST: &str = "https://i.instagram.com";
