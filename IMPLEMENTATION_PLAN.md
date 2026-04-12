@@ -728,9 +728,9 @@ realtime = ["rumqttc"]
 - [x] Port `ConfigManager`
 
 ### Phase 3 — User (Est. 1 day)
-- [ ] Implement user search (fuzzy + exact)
-- [ ] Implement user info retrieval
-- [ ] Implement full profile retrieval
+- [x] Implement user search (fuzzy + exact)
+- [x] Implement user info retrieval
+- [x] Implement full profile retrieval
 
 ### Phase 4 — Direct Messages (Est. 3 days)
 - [ ] Implement inbox feed with pagination
