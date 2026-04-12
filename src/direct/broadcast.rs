@@ -99,7 +99,7 @@ impl InstagramHttpClient {
             "action": action,
             "thread_id": thread_id,
             "item_id": item_id,
-            "_csrftoken": self.get_cookie_value("csrftoken").unwrap_or_else(|| "".to_string()),
+            "_csrftoken": self.get_cookie_value("csrftoken").unwrap_or_default(),
             "device_id": self.device.device_id,
             "guid": self.device.uuid,
         });

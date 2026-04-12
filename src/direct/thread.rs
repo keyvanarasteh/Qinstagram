@@ -25,15 +25,19 @@ impl InstagramHttpClient {
         let json_res: serde_json::Value = serde_json::from_str(&text).map_err(InstagramError::SerdeError)?;
         
         let mut messages = Vec::new();
+        let current_user_id = self.get_cookie_value("ds_user_id").unwrap_or_default();
+
         if let Some(thread) = json_res.get("thread") {
             if let Some(items_arr) = thread.get("items").and_then(|i| i.as_array()) {
                 for item_val in items_arr {
-                    if let Ok(msg) = serde_json::from_value::<Message>(item_val.clone()) {
+                    if let Some(msg) = crate::direct::parser::parse_message_item(item_val, thread_id, &current_user_id) {
                         messages.push(msg);
                     }
                 }
             }
         }
+        
+        messages.reverse();
         
         let has_more = json_res.get("thread").and_then(|i| i.get("has_older")).and_then(|h| h.as_bool()).unwrap_or(false);
         let next_cursor = json_res.get("thread").and_then(|i| i.get("oldest_cursor")).and_then(|c| c.as_str()).map(|s| s.to_string());
