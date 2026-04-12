@@ -851,6 +851,25 @@ Create the native GraphQL interface mirroring `Qicro` `ai_schema_core.rs`:
 
 ---
 
+## 🚀 Phase 12 — 100% GraphQL API Surface Coverage (Deep Audit Parity)
+The initial GraphQL integration (Phase 11) covered an ~20% foundational subset (`current_user`, `get_threads`, `send_message`, etc.). This phase enforces absolute 100% coverage, field by field across all missing structs and endpoints evaluated in the deep check.
+
+#### A. Advanced SimpleObject Mappings
+Provide `#![cfg_attr(feature = "graphql", ...)]` derivatives to these missing data pipelines:
+*   `src/notify/inbox.rs` -> `NewsInbox`
+*   `src/auth/login.rs` -> `LoginResult`
+*   `src/direct/inbox.rs` -> `InboxResult`
+*   `src/direct/thread.rs` -> `MessagesResult`
+
+#### B. Extensive Schema Resolvers Extension (`src/graphql.rs`)
+Implement the remaining 20+ missing Instagram lifecycle endpoints into the `async-graphql` schema:
+*   **Auth Mutations**: `login`, `two_factor_login`, `start_challenge`, `send_challenge_code`, `switch_user`, `logout`, `cleanup_sessions`
+*   **Media Mutations**: `send_photo(file_path: String)`, `send_video(file_path: String)`
+*   **Direct & Feed Queries**: `get_messages`, `get_timeline_feed`, `get_news_inbox`, `get_stories_for_user`, `search_users`, `search_user_exact`, `get_user_info`, `get_user_profile`
+*   **Direct Control**: `unsend_message`, `mark_thread_as_seen`, `ensure_thread`
+
+---
+
 ## 18. Verification Plan
 
 ### Automated Tests
