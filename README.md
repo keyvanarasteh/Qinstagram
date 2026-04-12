@@ -18,10 +18,13 @@
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/async-tokio-purple?style=flat-square&logo=tokio" alt="Tokio"></a>
   <a href="#"><img src="https://img.shields.io/badge/http-reqwest-blue?style=flat-square" alt="Reqwest"></a>
+  <a href="#"><img src="https://img.shields.io/badge/GraphQL-async_graphql-e535ab?style=flat-square&logo=graphql" alt="GraphQL"></a>
+  <a href="#"><img src="https://img.shields.io/badge/WebSocket-tokio_broadcast-blue?style=flat-square" alt="WebSocket"></a>
   <a href="#"><img src="https://img.shields.io/badge/mqtt-rumqttc-red?style=flat-square" alt="MQTT"></a>
-  <a href="#"><img src="https://img.shields.io/badge/serialization-serde-orange?style=flat-square" alt="Serde"></a>
   <a href="#"><img src="https://img.shields.io/badge/platform-linux-lightgrey?style=flat-square&logo=linux" alt="Linux"></a>
 </p>
+
+> ⚠️ **Compliance Warning**: This toolkit interfaces directly with Meta's Private API surface. It is engineered strictly for educational research, security emulation, and authorized AI infrastructure design. Violation of the primary Instagram Terms Of Service (e.g. unsolicited spam, fake account orchestration) via this library may result in severe account penalties or legal [Cease & Desist orders](https://www.facebook.com/help/instagram/). You assume all operational liabilities.
 
 ---
 
@@ -67,13 +70,12 @@ async fn main() {
 ## ✨ Features
 
 - **4 distinct workflow modules** cleanly organized reflecting Instagram's domain architecture.
+- **Enterprise GraphQL Parity** — Drops cleanly into external architectural ecosystems like Qicro matching 100% of endpoints via Schema definition logic.
+- **WebSocket Push Capabilities** — Bridge MQTT direct into React/Svelte5 frontends via Tokio sync broadcasts.
 - **Panic-free Library** — robust error handling wrapping and propagating `InstagramError` instances.
-- **Complex Payload Parser Ecosystem** — rigorously handles dynamic and polymorphic responses.
 - **Two-Factor and Challenge Flows** — seamlessly navigate verification checkpoint gates.
 - **MQTT Event Capabilities** — unified fallback messaging and real-time syncing.
-- **Multi-user Engine** — robust session token memory and cross-context swapping.
 - **Ruploado Media Configuration** — highly complex custom media routing built manually into Rust.
-- **Reverse-engineered Types** — modeled dynamically directly off typescript AST ports for strict parity.
 
 ---
 
@@ -101,6 +103,13 @@ async fn main() {
 | **stories**              | Story and reels gathering, tray parsing, real-time media seen tracking capabilities         | [📖](docs/stories.md)    |
 | **feed**                 | News inbox analysis, timeline extraction and pagination        | [📖](docs/feed.md)   |
 | **realtime**             | MQTT Skywalker integration behind `--features realtime`                                    | [📖](docs/realtime.md)        |
+
+### 🔌 Ecosystem Integrations 
+
+| Module               | Description                                                                                                               | Docs                           |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| **graphql**          | 100% declarative schema mapping (Qicro Standard) securely mapping query/mutation contexts on auth environments            | [📖](docs/graphql.md)      |
+| **ws**               | Native `axum` drop-in logic exposing underlying MQTT binaries to high-speed JSON web sockets via tokio-broadcaster        | [📖](docs/websocket.md)    |
 
 > 📚 **Full documentation index:** [docs/readme.md](docs/readme.md)
 
@@ -137,7 +146,7 @@ Include only what you need:
 
 ```toml
 [dependencies]
-qinstagram = { version = "0.1.0", features = ["realtime", "tests-mock"] }
+qinstagram = { version = "0.1.0", features = ["realtime", "graphql", "websocket"] }
 ```
 
 <details>
@@ -147,6 +156,10 @@ qinstagram = { version = "0.1.0", features = ["realtime", "tests-mock"] }
 # Subsystem Engines
 realtime = []
 media = []
+
+# Architectural Frameworks
+graphql = ["async-graphql"]
+websocket = ["axum", "futures-util"]
 
 # Development Mocks
 tests-mock = []

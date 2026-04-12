@@ -4,14 +4,18 @@ Welcome to the comprehensive documentation for the **Qinstagram** Rust crate.
 
 ## 📦 Core Modules
 
-- [**Authentication & Session (`auth`)**](auth.md)
-  - Security Checkpoints, 2FA, Multi-user Session Injection
-- [**Direct Ecosystem (`direct`)**](direct.md)
-  - Message parsing, Event Broadcasting, Media Upload logic
-- [**Storytelling (`stories`)**](stories.md)
-  - Extracting Reels Trays and marking media as seen
-- [**Feed API (`feed`)**](feed.md)
-  - Handling user timelines and news inboxes
+| Document | Description |
+|---|---|
+| [Authentication & Session](auth.md) | Security Checkpoints, 2FA, Multi-user Session Injection |
+| [Direct Messaging](direct.md)      | Send messages, fetch inboxes, upload media (Image/Video targeting thread), fuzzy search |
+| [Stories & Reels](stories.md)      | Fetch timeline trays, load specific user histories, and mutate read state |
+| [Feeds & Discovery](feed.md)       | Browse main timelines and news alerts |
+
+### Advanced Architectural Integrations
+| Document | Description |
+|---|---|
+| [GraphQL Coverage](graphql.md) | Standard SDK manual for mounting schemas dropping seamlessly into the Qicro interface |
+| [WebSocket Stream](websocket.md) | Manual for pushing live telemetry onto single websocket proxies preventing REST polling limits |
 
 ## ⚙️ Architecture Information
 
