@@ -86,4 +86,33 @@ impl InstagramHttpClient {
         results.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
         Ok(results)
     }
+
+    pub async fn get_messages(&self, thread_id: &str, cursor: Option<&str>) -> Result<(Vec<crate::types::message::Message>, Option<String>)> {
+        let mut url = format!("{}/api/v1/direct_v2/threads/{}/", crate::constants::HOST, thread_id);
+        if let Some(c) = cursor {
+            url.push_str(&format!("?cursor={}", url::form_urlencoded::byte_serialize(c.as_bytes()).collect::<String>()));
+        }
+
+        let res = self.get(&url).send().await?;
+        let text = res.text().await.map_err(InstagramError::NetworkError)?;
+        let json_res: serde_json::Value = serde_json::from_str(&text).map_err(InstagramError::SerdeError)?;
+        
+        let mut messages = Vec::new();
+        let current_user_id = self.get_cookie_value("ds_user_id").unwrap_or_else(|| "".into());
+
+        if let Some(thread_obj) = json_res.get("thread") {
+            if let Some(items) = thread_obj.get("items").and_then(|i| i.as_array()) {
+                for item in items {
+                    if let Some(msg) = crate::direct::parser::parse_message_item(item, thread_id, &current_user_id) {
+                        messages.push(msg);
+                    }
+                }
+            }
+        }
+        
+        messages.reverse();
+        let next_cursor = json_res.get("thread").and_then(|t| t.get("oldest_cursor")).and_then(|c| c.as_str()).map(|s| s.to_string());
+        
+        Ok((messages, next_cursor))
+    }
 }
