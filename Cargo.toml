@@ -1,7 +1,10 @@
 [package]
 name = "qinstagram"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
+description = "Enterprise-grade IG Private API Architecture & Protocol Engineering toolkit with 100% Async-GraphQL & Websocket integration."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/keyvanarasteh/Qinstagram"
 
 [dependencies]
 tokio = { version = "1.37", features = ["full"] }
