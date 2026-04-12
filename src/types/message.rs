@@ -5,12 +5,14 @@ use super::media::{MessageMedia};
 use super::post::Post;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct Reaction {
     pub emoji: String,
     pub sender_id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct ReactionEvent {
     pub thread_id: String,
     pub item_id: String,
@@ -20,6 +22,7 @@ pub struct ReactionEvent {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct SeenEvent {
     pub thread_id: String,
     pub user_id: String,
@@ -28,6 +31,7 @@ pub struct SeenEvent {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct RepliedToMessage {
     pub id: String,
     pub user_id: String,
@@ -37,12 +41,14 @@ pub struct RepliedToMessage {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct Link {
     pub url: String,
     pub text: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::Union))]
 #[serde(tag = "item_type")]
 pub enum Message {
     #[serde(rename = "text")]
@@ -58,6 +64,7 @@ pub enum Message {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct BaseMessage {
     pub id: String,
     pub timestamp: DateTime<Utc>,
@@ -72,6 +79,7 @@ pub struct BaseMessage {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct TextMessage {
     #[serde(flatten)]
     pub base: BaseMessage,
@@ -79,6 +87,7 @@ pub struct TextMessage {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct MediaMessage {
     #[serde(flatten)]
     pub base: BaseMessage,
@@ -86,6 +95,7 @@ pub struct MediaMessage {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct LinkMessage {
     #[serde(flatten)]
     pub base: BaseMessage,
@@ -93,6 +103,7 @@ pub struct LinkMessage {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct PlaceholderMessage {
     #[serde(flatten)]
     pub base: BaseMessage,
@@ -100,6 +111,7 @@ pub struct PlaceholderMessage {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct MediaShareMessage {
     #[serde(flatten)]
     pub base: BaseMessage,

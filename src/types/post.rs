@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::media::{ImageVersions, VideoVersion};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct PostUser {
     pub pk: u64,
     pub username: String,
@@ -10,11 +11,13 @@ pub struct PostUser {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct Caption {
     pub text: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct CarouselItem {
     pub id: String,
     pub media_type: u8,
@@ -23,6 +26,7 @@ pub struct CarouselItem {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct Post {
     pub id: String,
     pub user: PostUser,
@@ -38,6 +42,7 @@ pub struct Post {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct FeedInstance {
     pub posts: Vec<Post>,
 }

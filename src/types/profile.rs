@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct ProfileInfo {
     pub pk: String,
     pub username: String,
@@ -16,6 +17,7 @@ pub struct ProfileInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct AuthState {
     pub is_logged_in: bool,
     pub username: Option<String>,

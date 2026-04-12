@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct MediaCandidate {
     pub url: String,
     pub width: u32,
@@ -8,6 +9,7 @@ pub struct MediaCandidate {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct ImageVersions {
     pub candidates: Vec<MediaCandidate>,
 }
@@ -15,6 +17,7 @@ pub struct ImageVersions {
 pub type VideoVersion = MediaCandidate;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct MessageMedia {
     pub id: String,
     pub media_type: u8,

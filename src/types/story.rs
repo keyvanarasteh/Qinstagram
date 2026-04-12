@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::media::{ImageVersions, VideoVersion};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct StoryUser {
     pub pk: u64,
     pub username: String,
@@ -10,6 +11,7 @@ pub struct StoryUser {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct ReelMentionUser {
     pub pk: u64,
     pub username: String,
@@ -18,11 +20,13 @@ pub struct ReelMentionUser {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct ReelMention {
     pub user: ReelMentionUser,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct Story {
     pub id: String,
     pub user: StoryUser,
@@ -34,6 +38,7 @@ pub struct Story {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct StoryReel {
     pub user: StoryUser,
     pub stories: Vec<Story>,

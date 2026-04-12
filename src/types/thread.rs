@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use super::message::Message;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct Thread {
     pub id: String,
     pub title: String,
@@ -14,6 +15,7 @@ pub struct Thread {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct User {
     pub pk: String,
     pub username: String,
