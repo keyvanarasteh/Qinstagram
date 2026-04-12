@@ -733,13 +733,13 @@ realtime = ["rumqttc"]
 - [x] Implement full profile retrieval
 
 ### Phase 4 — Direct Messages (Est. 3 days)
-- [ ] Implement inbox feed with pagination
-- [ ] Implement thread message feed with cursor
-- [ ] Implement message sending (text, reply)
+- [x] Implement inbox feed with pagination
+- [x] Implement thread message feed with cursor
+- [x] Implement message sending (text, reply)
 - [ ] Implement media sending (photo, video)
-- [ ] Implement unsend
-- [ ] Implement mark seen (API)
-- [ ] Implement thread resolution (ensure_thread)
+- [x] Implement unsend
+- [x] Implement mark seen (API)
+- [x] Implement thread resolution (ensure_thread)
 - [ ] Port message parser (587 lines → Rust)
 - [ ] Implement client-side thread search
 
