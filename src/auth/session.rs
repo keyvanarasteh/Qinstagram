@@ -53,11 +53,14 @@ impl SessionManager {
 
     pub async fn save_state(&self, device: &DeviceInfo, cookie_store: &CookieStoreMutex) -> Result<()> {
         let path = self.session_file_path();
-        let guard = cookie_store.lock().map_err(|_| InstagramError::Unknown("Failed to lock cookie store".into()))?;
-        
-        let mut cookie_bytes = Vec::new();
-        guard.save_json(&mut cookie_bytes).map_err(|e| InstagramError::Unknown(e.to_string()))?;
-        let cookies_str = String::from_utf8(cookie_bytes).map_err(|e| InstagramError::Unknown(e.to_string()))?;
+        let mut buffer = Vec::new();
+        {
+            #[allow(deprecated)]
+            let guard = cookie_store.lock().map_err(|_| InstagramError::Unknown("Failed to lock cookie store".into()))?;
+            #[allow(deprecated)]
+            guard.save_json(&mut buffer).map_err(|e| InstagramError::Unknown(e.to_string()))?;
+        }
+        let cookies_str = String::from_utf8(buffer).map_err(|e| InstagramError::Unknown(e.to_string()))?;
         
         let state = AppState {
             device: device.clone(),

@@ -1,7 +1,7 @@
 use crate::error::{InstagramError, Result};
 use crate::transport::client::InstagramHttpClient;
 use crate::types::post::FeedInstance;
-use serde::{Deserialize, Serialize};
+
 
 impl InstagramHttpClient {
     pub async fn get_timeline_feed(&self) -> Result<FeedInstance> {

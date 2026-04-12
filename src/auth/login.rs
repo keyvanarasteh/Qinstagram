@@ -36,7 +36,7 @@ impl InstagramHttpClient {
         let payload = json!({
             "username": username,
             "enc_password": format!("#PWD_INSTAGRAM_BROWSER:0:{}:{}", 
-                std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs(), 
+                std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap_or_else(|_| std::time::Duration::from_secs(0)).as_secs(), 
                 password),
             "phone_id": self.device.phone_id,
             "device_id": self.device.device_id,
@@ -61,7 +61,7 @@ impl InstagramHttpClient {
                 error: None,
                 username: None,
                 checkpoint_error: None,
-                two_factor_info: Some(serde_json::from_value(two_factor.clone()).unwrap()),
+                two_factor_info: serde_json::from_value(two_factor.clone()).ok(),
                 bad_password: false,
             });
         }
@@ -145,6 +145,7 @@ impl InstagramHttpClient {
         })
     }
 
+    #[allow(deprecated)]
     pub async fn login_by_session(&mut self, session_manager: &SessionManager) -> Result<LoginResult> {
         if let Some(state) = session_manager.load_state().await? {
             let cookies_bytes = state.cookies.into_bytes();

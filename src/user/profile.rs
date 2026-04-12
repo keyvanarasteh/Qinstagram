@@ -5,15 +5,16 @@ use crate::types::thread::User;
 
 impl InstagramHttpClient {
     pub async fn get_current_user(&self) -> Result<Option<User>> {
-        let guard = self.cookie_store.lock().unwrap();
         let mut pk = None;
-        for cookie in guard.iter_any() {
-            if cookie.name() == "ds_user_id" {
-                pk = Some(cookie.value().to_string());
-                break;
+        {
+            let guard = self.cookie_store.lock().map_err(|e| InstagramError::Unknown(e.to_string()))?;
+            for cookie in guard.iter_any() {
+                if cookie.name() == "ds_user_id" {
+                    pk = Some(cookie.value().to_string());
+                    break;
+                }
             }
         }
-        drop(guard); // avoid holding lock while calling async methods
         
         if let Some(user_pk) = pk {
             let info = self.get_user_info(&user_pk).await?;

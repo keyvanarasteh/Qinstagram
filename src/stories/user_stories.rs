@@ -35,15 +35,16 @@ impl InstagramHttpClient {
             }));
         }
         
-        let guard = self.cookie_store.lock().unwrap();
         let mut current_user_id = "".to_string();
-        for cookie in guard.iter_any() {
-            if cookie.name() == "ds_user_id" {
-                current_user_id = cookie.value().to_string();
-                break;
+        {
+            let guard = self.cookie_store.lock().map_err(|e| InstagramError::Unknown(e.to_string()))?;
+            for cookie in guard.iter_any() {
+                if cookie.name() == "ds_user_id" {
+                    current_user_id = cookie.value().to_string();
+                    break;
+                }
             }
         }
-        drop(guard);
         
         let payload = json!({
             "items": items,

@@ -781,6 +781,34 @@ realtime = ["rumqttc"]
 
 ---
 
+## 🔍 DEEP AUDIT: `instagram-cli` vs `Qinstagram`
+*Reflecting on the divergence between the TypeScript project and the initial Rust port.*
+
+### 1. What was Implemented Completely
+*   **Authentication Foundation:** Password login, 2FA, session injection & cookie serialization. Deterministic Android device fingerprinting. 
+*   **Network Transport:** HMAC payload signing, exact header synchronization, `reqwest_cookie_store` session lifecycle mapping.
+*   **Media Downloader:** Basic chunked media writing. 
+*   **Core API Traversals:** `feed.timeline`, `news.inbox`, `direct.inbox`, basic `stories.reels_tray`.
+
+### 2. What was Skipped or Stubbed
+*   **Advanced Message Parser (`message-parser.ts`):** We skipped the rigorous custom payload parsing (`ActionLogItem`, `MediaShareItem`, etc.) in favor of generic structurally sound types, placing the burden of normalization on `serde_json`.
+*   **Realtime MQTT Subsystem (`instagram_mqtt`):** Due to the enormity of managing `skywalker` and `graphql` subscriptions securely, we mocked `RealtimeClient` endpoints behind a `.cfg(feature="realtime")` flag rather than providing the `rumqttc` state loop.
+*   **Cache Management Utilities:** `cleanupCache()`, `cleanupLogs()`, and `cleanupSessions()` filesystem commands were ignored.
+
+### 3. What is Missing
+*   **Challenge & Checkpoint APIs:** While `Qinstagram` maps checkpoint errors, it lacks `startChallenge()` and `sendChallengeCode()` flows.
+*   **Multi-User Workflow:** The TS client allows `switchUser()` and global active/inactive state handling.
+*   **Fuzzy Search (`Fuse.js` port):** `searchThreadsByTitle()` uses local cached threads with Levenshtein-style fuzzy mapping which was omitted in the Rust port.
+*   **Seen State Unification:** The TS client attempts MQTT `markAsSeen` before falling back to HTTP. `Qinstagram` only does HTTP. 
+
+### 4. What is Wrong (Coding Standards Mismatch with `web-analyzer`)
+According to `web-analyzer/.cursorrules`:
+*   **Error Handling (unwrap usage):** We have raw `.unwrap()` calls inside library functions (`profile.rs`, `user_stories.rs`) rather than mapping custom errors. This strictly violates the `web-analyzer` "never use unwrap() in library code" policy.
+*   **Module Exposure (No Prelude):** The public interface is scattered. We need a `src/prelude.rs` specifically for consumer-friendly macro imports mimicking `web-analyzer`.
+*   **Missing API Documentation:** Needs `# Example` doc tests and general `///` structural comments on pub forms.
+
+---
+
 ## 18. Verification Plan
 
 ### Automated Tests
