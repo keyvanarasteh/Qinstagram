@@ -4,6 +4,7 @@ use crate::types::thread::Thread;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct InboxResult {
     pub threads: Vec<Thread>,
     pub has_more: bool,

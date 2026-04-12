@@ -870,6 +870,14 @@ Implement the remaining 20+ missing Instagram lifecycle endpoints into the `asyn
 
 ---
 
+## 🚀 Phase 13 — WebSocket & MQTT Syndication
+Integrate the internal `rumqttc` Instagram Skywalker MQTT logic into a frontend-friendly WebSocket streaming architecture natively compatible with Qicro.
+*   **A. Real-time Message Engine**: Map binary FB payloads to `MessageReceived`, `MessageUnsent`, `ReactionAdded` JSON broadcasts.
+*   **B. Dynamic Inbox Presence**: Expose `UserTyping` and `SeenReceipt` events to eliminate inefficient HTTP polling loops across frontend applications.
+*   **C. WsHandler Endpoint Standard**: Expose `pub async fn ws_handler` leveraging `tokio::sync::broadcast` matching the isolated Qicro event bus.
+
+---
+
 ## 18. Verification Plan
 
 ### Automated Tests

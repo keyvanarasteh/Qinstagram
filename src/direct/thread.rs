@@ -4,6 +4,7 @@ use crate::types::message::Message;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct MessagesResult {
     pub messages: Vec<Message>,
     pub has_more: bool,

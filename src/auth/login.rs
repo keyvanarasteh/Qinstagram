@@ -6,6 +6,7 @@ use crate::transport::client::InstagramHttpClient;
 use crate::transport::signing::sign_request;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct CheckpointError {
     pub message: String,
     pub challenge_url: String,
@@ -15,6 +16,7 @@ pub struct CheckpointError {
 use crate::auth::session::SessionManager;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct TwoFactorInfo {
     pub two_factor_identifier: String,
     pub obfuscated_phone_number: String,
@@ -22,6 +24,7 @@ pub struct TwoFactorInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct LoginResult {
     pub success: bool,
     pub error: Option<String>,
