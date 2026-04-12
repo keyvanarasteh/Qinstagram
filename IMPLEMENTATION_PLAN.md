@@ -744,34 +744,34 @@ realtime = ["rumqttc"]
 - [ ] Implement client-side thread search
 
 ### Phase 5 — Stories (Est. 1 day)
-- [ ] Implement reels tray feed
-- [ ] Implement per-user story feed
-- [ ] Implement mark stories as seen
-- [ ] Implement story caching
+- [x] Implement reels tray feed
+- [x] Implement per-user story feed
+- [x] Implement mark stories as seen
+- [x] Implement story caching
 
 ### Phase 6 — Feed & Notifications (Est. 1 day)
-- [ ] Implement timeline feed
-- [ ] Implement news inbox
+- [x] Implement timeline feed
+- [x] Implement news inbox
 
 ### Phase 7 — Media (Est. 0.5 day)
-- [ ] Implement media download
-- [ ] Implement best-URL resolution
-- [ ] Port `getBestMediaUrl()` and `downloadMediaFromMessage()`
+- [x] Implement media download
+- [x] Implement best-URL resolution
+- [x] Port `getBestMediaUrl()` and `downloadMediaFromMessage()`
 
 ### Phase 8 — Realtime/MQTT (Est. 3-4 days)
-- [ ] Research Instagram MQTT protocol specifics
-- [ ] Implement MQTT connection with `rumqttc`
-- [ ] Implement GraphQL subscription serialization
-- [ ] Implement Skywalker subscription serialization
-- [ ] Implement event parsing (message, reaction, seen)
-- [ ] Implement `broadcast::Receiver` event channel
-- [ ] Implement MQTT-based reaction sending
-- [ ] Implement MQTT-based mark-as-seen
+- [x] Research Instagram MQTT protocol specifics
+- [x] Implement MQTT connection with `rumqttc`
+- [x] Implement GraphQL subscription serialization
+- [x] Implement Skywalker subscription serialization
+- [x] Implement event parsing (message, reaction, seen)
+- [x] Implement `broadcast::Receiver` event channel
+- [x] Implement MQTT-based reaction sending
+- [x] Implement MQTT-based mark-as-seen
 
 ### Phase 9 — Integration (Est. 1 day)
-- [ ] Build high-level `InstagramClient` facade
-- [ ] Wire all modules together
-- [ ] Add builder pattern for client configuration
+- [x] Build high-level `InstagramClient` facade
+- [x] Wire all modules together
+- [x] Add builder pattern for client configuration
 
 ### Phase 10 — Polish (Est. 1-2 days)
 - [ ] Write examples (`login.rs`, `inbox.rs`, `stories.rs`)
