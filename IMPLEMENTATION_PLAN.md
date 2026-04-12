@@ -832,6 +832,25 @@ The scan confirmed zero unresolved gaps. Functions originally hypothesized as mi
 
 ---
 
+## 🚀 Phase 11 — GraphQL Schema Parity (Like Qicro)
+Integrating the `async-graphql` standard used natively within `web-analyzer/Qicro` into the `Qinstagram` crate to allow instant ingestion of models and mutation endpoints as an AI backend data-source.
+
+#### A. Dependency Flagging
+*   **Feature Gate**: Add `graphql = ["dep:async-graphql"]` to `Cargo.toml`.
+*   **Opt-in Derives**: Add `#![cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]` (and conditionally `Enum`) strictly around:
+    *   `src/types/user.rs` (User, ProfileInfo)
+    *   `src/types/thread.rs` (Thread, InboxResult)
+    *   `src/types/message.rs` (Message Enums - may require Union macro)
+    *   `src/types/story.rs` (StoryReel, Story)
+
+#### B. Resolver Architecture (`src/graphql/mod.rs`)
+Create the native GraphQL interface mirroring `Qicro` `ai_schema_core.rs`:
+*   Create `QinstagramQuery`: Exposes endpoints `get_threads`, `get_current_user`, `search_threads_by_title`.
+*   Create `QinstagramMutation`: Exposes endpoints `send_message`, `send_reaction`, `mark_item_as_seen`.
+*   **Context Extraction**: Utilize `ctx.data::<std::sync::Arc<InstagramClient>>()` safely within resolvers allowing `web-analyzer` to inject the client dynamically.
+
+---
+
 ## 18. Verification Plan
 
 ### Automated Tests
