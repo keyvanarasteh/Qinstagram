@@ -774,10 +774,10 @@ realtime = ["rumqttc"]
 - [x] Add builder pattern for client configuration
 
 ### Phase 10 — Polish (Est. 1-2 days)
-- [ ] Write examples (`login.rs`, `inbox.rs`, `stories.rs`)
-- [ ] Write documentation (rustdoc)
-- [ ] Write integration tests (mock server based)
-- [ ] CI/CD setup
+- [x] Write examples (`login.rs`, `inbox.rs`, `stories.rs`)
+- [x] Write documentation (rustdoc)
+- [x] Write integration tests (mock server based)
+- [x] CI/CD setup
 
 ---
 
