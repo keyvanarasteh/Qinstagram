@@ -807,6 +807,23 @@ According to `web-analyzer/.cursorrules`:
 *   **Module Exposure (No Prelude):** The public interface is scattered. We need a `src/prelude.rs` specifically for consumer-friendly macro imports mimicking `web-analyzer`.
 *   **Missing API Documentation:** Needs `# Example` doc tests and general `///` structural comments on pub forms.
 
+### 5. Supplementary Deep Audit (Round 2)
+Further auditing of `instagram-cli/source/client.ts` reveals these advanced HTTP capabilities are still absent in `Qinstagram`:
+
+#### A. Media Uploads & Direct messaging
+*   **Media Direct Share (`sendPhoto`, `sendVideo`)**: Sharing native image and video files via DM requires a complex two-step rupload (rupload.facebook.com) signature protocol which `Qinstagram` lacks.
+*   **Direct Reactions (`sendReaction`)**: Only text sending (`send_message`/`send_reply`) is supported; liking/reacting via HTTP is absent.
+*   **Media Exfiltration (`downloadMedia`, `downloadMediaFromMessage`)**: Wrappers to grab bytes from signed IG CDN links are unimplemented.
+
+#### B. Direct Thread Lookup
+*   **Identity Search (`searchThreadByUsername`)**: Missing the ability to quickly locate a specific Thread based on target identity/username. We only have `search_threads_by_title` (fuzzy title matching).
+
+#### C. Stories Lifecycle
+*   **Tracking (`markStoriesAsSeen`)**: The ability to mutate feed state by sending seen-receipts for reels/stories. We can fetch them, but cannot mark them.
+
+#### D. Validation Parity
+*   **Mock Datasets (`mocks/mock-data.ts`)**: `instagram-cli` uses rigorous mock offline datasets. The Rust repo completely lacks offline fixture parity for unit testing responses safely.
+
 ---
 
 ## 18. Verification Plan
