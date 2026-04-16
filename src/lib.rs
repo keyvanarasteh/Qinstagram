@@ -15,5 +15,8 @@ pub mod media;
 pub mod realtime;
 pub mod client;
 
+#[cfg(feature = "graphql")]
+pub mod graphql;
+
 pub use client::{InstagramClient, ClientBuilder};
 pub use error::{InstagramError, Result};

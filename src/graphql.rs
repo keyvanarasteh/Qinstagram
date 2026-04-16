@@ -8,7 +8,7 @@ use crate::client::InstagramClient;
 #[cfg(feature = "graphql")]
 use crate::types::{
     profile::{ProfileInfo, AuthState},
-    thread::{Thread, User, InboxResult},
+    thread::{Thread, User},
     story::{StoryReel, Story},
     message::{Message, ReactionEvent},
     post::{FeedInstance, Post},
@@ -35,7 +35,7 @@ pub struct QinstagramQuery;
 #[Object]
 impl QinstagramQuery {
     /// Retrieve the currently authenticated user's profile info
-    async fn current_user(&self, ctx: &Context<'_>) -> Result<ProfileInfo> {
+    async fn current_user(&self, ctx: &Context<'_>) -> Result<Option<User>> {
         let client = ctx.data::<Arc<InstagramClient>>()?;
         let user = client.get_current_user().await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
@@ -218,8 +218,8 @@ impl QinstagramMutation {
     // ensuring we can perform `&mut self` login flows perfectly.
     
     /// Normal login flow
-    async fn login(&self, ctx: &Context<'_>, username: String, password: String) -> Result<LoginResult> {
-        let mut local_client = crate::client::InstagramClient::builder().build().await
+    async fn login(&self, _ctx: &Context<'_>, username: String, password: String) -> Result<LoginResult> {
+        let mut local_client = crate::client::ClientBuilder::new(&username).build().await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
         let res = local_client.login(&username, &password).await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
@@ -227,8 +227,8 @@ impl QinstagramMutation {
     }
 
     /// Two Factor login flow
-    async fn two_factor_login(&self, ctx: &Context<'_>, code: String, identifier: String, username: String) -> Result<LoginResult> {
-        let mut local_client = crate::client::InstagramClient::builder().build().await
+    async fn two_factor_login(&self, _ctx: &Context<'_>, code: String, identifier: String, username: String) -> Result<LoginResult> {
+        let mut local_client = crate::client::ClientBuilder::new(&username).build().await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
         let res = local_client.two_factor_login(&code, &identifier, &username).await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
@@ -236,8 +236,8 @@ impl QinstagramMutation {
     }
 
     /// Start Challenge flow
-    async fn start_challenge(&self, ctx: &Context<'_>, url: String) -> Result<bool> {
-        let mut local_client = crate::client::InstagramClient::builder().build().await
+    async fn start_challenge(&self, _ctx: &Context<'_>, url: String, username: String) -> Result<bool> {
+        let mut local_client = crate::client::ClientBuilder::new(&username).build().await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
         local_client.start_challenge(&url).await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
@@ -245,8 +245,8 @@ impl QinstagramMutation {
     }
 
     /// Send Challenge Code
-    async fn send_challenge_code(&self, ctx: &Context<'_>, url: String, code: String, username: String) -> Result<LoginResult> {
-        let mut local_client = crate::client::InstagramClient::builder().build().await
+    async fn send_challenge_code(&self, _ctx: &Context<'_>, url: String, code: String, username: String) -> Result<LoginResult> {
+        let mut local_client = crate::client::ClientBuilder::new(&username).build().await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
         let res = local_client.send_challenge_code(&url, &code, &username).await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
@@ -254,19 +254,19 @@ impl QinstagramMutation {
     }
 
     /// Application Level static controls
-    async fn switch_user(&self, ctx: &Context<'_>, username: String) -> Result<bool> {
+    async fn switch_user(&self, _ctx: &Context<'_>, username: String) -> Result<bool> {
         crate::client::InstagramClient::switch_user(&username).await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
         Ok(true)
     }
 
-    async fn logout(&self, ctx: &Context<'_>, username: Option<String>) -> Result<bool> {
+    async fn logout(&self, _ctx: &Context<'_>, username: Option<String>) -> Result<bool> {
         crate::client::InstagramClient::logout(username.as_deref()).await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
         Ok(true)
     }
 
-    async fn cleanup_sessions(&self, ctx: &Context<'_>) -> Result<bool> {
+    async fn cleanup_sessions(&self, _ctx: &Context<'_>) -> Result<bool> {
         crate::client::InstagramClient::cleanup_sessions().await
             .map_err(|e| async_graphql::Error::new(e.to_string()))?;
         Ok(true)
