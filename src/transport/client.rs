@@ -47,6 +47,20 @@ impl InstagramHttpClient {
         self.client.post(url)
     }
 
+    /// GET using the Chrome WebView user-agent (for webview-style endpoints).
+    pub fn get_web(&self, url: &str) -> RequestBuilder {
+        self.client
+            .get(url)
+            .header(reqwest::header::USER_AGENT, self.device.web_user_agent.as_str())
+    }
+
+    /// POST using the Chrome WebView user-agent (for webview-style endpoints).
+    pub fn post_web(&self, url: &str) -> RequestBuilder {
+        self.client
+            .post(url)
+            .header(reqwest::header::USER_AGENT, self.device.web_user_agent.as_str())
+    }
+
     pub fn get_cookie_value(&self, name: &str) -> Option<String> {
         let guard = self.cookie_store.lock().ok()?;
         for cookie in guard.iter_any() {

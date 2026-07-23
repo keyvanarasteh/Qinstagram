@@ -7,6 +7,9 @@ use super::media::{ImageVersions, VideoVersion};
 pub struct StoryUser {
     pub pk: u64,
     pub username: String,
+    /// Display name from Instagram (`full_name` on user objects).
+    #[serde(default)]
+    pub full_name: Option<String>,
     pub profile_pic_url: Option<String>,
 }
 
@@ -41,5 +44,8 @@ pub struct Story {
 #[cfg_attr(feature = "graphql", derive(async_graphql::SimpleObject))]
 pub struct StoryReel {
     pub user: StoryUser,
+    /// Story media for this reel. Instagram tray payloads use `items`;
+    /// filled reels and some clients use `stories`.
+    #[serde(default, alias = "items")]
     pub stories: Vec<Story>,
 }

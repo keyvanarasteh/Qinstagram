@@ -157,7 +157,9 @@ impl InstagramHttpClient {
                     *guard = store;
                 }
             }
-            self.device = state.device;
+            let mut device = state.device;
+            device.ensure_modern_web_user_agent();
+            self.device = device;
             
             return Ok(LoginResult {
                 success: true,

@@ -7,6 +7,9 @@ use super::media::{ImageVersions, VideoVersion};
 pub struct PostUser {
     pub pk: u64,
     pub username: String,
+    /// Display name from Instagram (`full_name` on user objects).
+    #[serde(default)]
+    pub full_name: Option<String>,
     pub profile_pic_url: Option<String>,
 }
 

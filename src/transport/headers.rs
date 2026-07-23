@@ -66,3 +66,9 @@ pub fn request_headers(user_agent: &str) -> HeaderMap {
     
     headers
 }
+
+/// Headers for webview-style Instagram endpoints that expect a Chrome `webUserAgent`
+/// (avoids HTTP 467 when app version is modern but Chrome UA is ancient).
+pub fn web_request_headers(web_user_agent: &str) -> HeaderMap {
+    request_headers(web_user_agent)
+}

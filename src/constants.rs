@@ -7,3 +7,7 @@ pub const IG_SIG_KEY_VERSION: &str = "4";
 pub const FACEBOOK_ANALYTICS_APP_ID: &str = "567067343352427";
 pub const HOSTNAME: &str = "i.instagram.com";
 pub const HOST: &str = "https://i.instagram.com";
+
+/// Chrome version embedded in the Android WebView `webUserAgent`.
+/// Kept modern so app version 416 is not paired with Chrome/70 (causes HTTP 467 on some paths).
+pub const WEB_CHROME_VERSION: &str = "131.0.6778.135";

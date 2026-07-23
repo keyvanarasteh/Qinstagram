@@ -74,11 +74,29 @@ impl QinstagramQuery {
         serde_json::to_string(&result).map_err(|e| async_graphql::Error::new(e.to_string()))
     }
 
-    /// Retrieve messages for a specific thread
-    async fn messages(&self, ctx: &Context<'_>, thread_id: String, cursor: Option<String>) -> Result<MessagesResult> {
+    /// Retrieve messages for a specific thread.
+    /// When `limit` is set, returns the **latest** N messages (chronological order),
+    /// not the oldest N from the page — matching the instagram-cli `read --limit` fix.
+    async fn messages(
+        &self,
+        ctx: &Context<'_>,
+        thread_id: String,
+        cursor: Option<String>,
+        limit: Option<i32>,
+    ) -> Result<MessagesResult> {
         let client = ctx.data::<Arc<InstagramClient>>()?;
-        let result = client.get_messages(&thread_id, cursor.as_deref()).await
-            .map_err(|e| async_graphql::Error::new(e.to_string()))?;
+        let result = if let Some(limit) = limit {
+            let limit = limit.max(0) as usize;
+            client
+                .get_latest_messages(&thread_id, cursor.as_deref(), limit)
+                .await
+                .map_err(|e| async_graphql::Error::new(e.to_string()))?
+        } else {
+            client
+                .get_messages(&thread_id, cursor.as_deref())
+                .await
+                .map_err(|e| async_graphql::Error::new(e.to_string()))?
+        };
         Ok(result)
     }
 
